@@ -1,274 +1,419 @@
-# Nexus - Framework-Agnostic PHP Packages for ERP Systems
+# Nexus\Identity
 
-Nexus is a **package-only monorepo** containing 50+ atomic, reusable PHP packages for building Enterprise Resource Planning (ERP) systems. Each package is framework-agnostic, making them usable with Laravel, Symfony, Slim, or any other PHP framework.
+**Framework-agnostic Identity and Access Management package for Nexus ERP**
 
-## 📖 The Philosophy: "Pure Business Logic, Framework Independent"
+The Identity package provides a comprehensive, pure PHP solution for authentication, authorization, session management, and user identity management. It follows strict contract-driven design principles and integrates seamlessly with the Nexus monorepo architecture.
 
-The core philosophy of Nexus is **Framework Agnosticism**. Business logic should be portable and reusable across different frameworks and applications.
+## Features
 
-- **🎯 Pure Business Logic**: Packages contain only business rules and domain logic
-- **🔌 Interface-Driven**: All external dependencies defined as contracts
-- **📦 Atomic & Publishable**: Each package can be published independently to Packagist
-- **🧪 Testable**: Pure PHP logic with mockable dependencies
-- **🌍 Framework-Agnostic**: Works with Laravel, Symfony, or any PHP framework
+- ✅ **Pure PHP 8.3+** - No framework dependencies in core logic
+- ✅ **CQRS Architecture** - Separate Query and Persist interfaces for clean separation
+- ✅ **Contract-Driven** - All data structures and operations defined via interfaces
+- ✅ **Role-Based Access Control (RBAC)** - Flexible permission management with role hierarchy
+- ✅ **Direct Permission Assignment** - Bypass roles for fine-grained control
+- ✅ **Wildcard Permissions** - `users.*` grants all user permissions
+- ✅ **Session Management** - Secure token-based authentication
+- ✅ **API Token Authentication** - Scoped tokens for programmatic access
+- ✅ **Multi-Factor Authentication (MFA)** - TOTP, WebAuthn/Passkeys, Backup Codes
+- ✅ **Single Sign-On (SSO)** - SAML, OAuth2, OIDC support (pluggable)
+- ✅ **Password Security** - Argon2id hashing, breach detection, history tracking
+- ✅ **Account Lifecycle** - Registration, activation, suspension, locking
+- ✅ **Security Events** - Integration with AuditLogger
+- ✅ **Multi-Tenant** - Tenant-scoped users and roles
 
-## 🏗️ Architecture
-
-### 📦 Atomic Packages
-
-All packages in `packages/` are self-contained units of functionality designed to be:
-
-- **Framework-Agnostic:** Pure PHP 8.3+ logic with no framework dependencies
-- **Persistence-Agnostic:** No migrations or models - data access defined via interfaces
-- **Publishable:** Each package can be published independently to Packagist
-- **Contract-Driven:** All external dependencies injected as interfaces
-- **Stateless:** Long-term state externalized via storage interfaces
-
-## 📦 Available Packages (51 packages)
-
-### Core Infrastructure (8 packages)
-- **`Nexus\Tenant`** - Multi-tenancy context and isolation engine
-- **`Nexus\Setting`** - Global and tenant-specific configuration management
-- **`Nexus\Sequencing`** - Auto-numbering with atomic counter management
-- **`Nexus\Period`** - Fiscal period management and transaction validation
-- **`Nexus\AuditLogger`** - Timeline feeds and audit trails
-- **`Nexus\EventStream`** - Event sourcing for critical domains (Finance GL, Inventory)
-- **`Nexus\Uom`** - Unit of measurement management and conversion
-- **`Nexus\Monitoring`** - Observability with telemetry, health checks, alerting, SLO tracking
-
-### Identity & Security (3 packages)
-- **`Nexus\Identity`** - Authentication, RBAC, MFA, session/token management
-- **`Nexus\Crypto`** - Cryptographic operations and key management
-- **`Nexus\Audit`** - Advanced audit capabilities (extends AuditLogger)
-
-### Finance & Accounting (7 packages)
-- **`Nexus\Finance`** - General ledger, journal entries, double-entry bookkeeping
-- **`Nexus\Accounting`** - Financial statements, period close, consolidation
-- **`Nexus\Receivable`** - Customer invoicing, collections, credit control
-- **`Nexus\Payable`** - Vendor bills, payment processing, 3-way matching
-- **`Nexus\CashManagement`** - Bank reconciliation, cash flow forecasting
-- **`Nexus\Budget`** - Budget planning and variance tracking
-- **`Nexus\Assets`** - Fixed asset management, depreciation
-- **`Nexus\Currency`** - Multi-currency management and exchange rates
-
-### Sales & Operations (6 packages)
-- **`Nexus\Sales`** - Quotation-to-order lifecycle, pricing engine
-- **`Nexus\Inventory`** - Stock management with lot/serial tracking
-- **`Nexus\Warehouse`** - Warehouse operations and bin management
-- **`Nexus\Procurement`** - Purchase requisitions, POs, goods receipt
-- **`Nexus\Manufacturing`** - Bill of materials, work orders, MRP
-- **`Nexus\Product`** - Product catalog, pricing, categorization
-
-### Human Resources (3 packages)
-- **`Nexus\Hrm`** - Leave, attendance, performance reviews
-- **`Nexus\Payroll`** - Payroll processing framework
-- **`Nexus\PayrollMysStatutory`** - Malaysian statutory calculations (EPF, SOCSO, PCB)
-
-### Customer & Partner Management (4 packages)
-- **`Nexus\Party`** - Customers, vendors, employees, contacts
-- **`Nexus\Crm`** - Leads, opportunities, sales pipeline
-- **`Nexus\Marketing`** - Campaigns, A/B testing, GDPR compliance
-- **`Nexus\FieldService`** - Work orders, technicians, service contracts
-
-### Integration & Automation (7 packages)
-- **`Nexus\Connector`** - Integration hub with circuit breaker, OAuth
-- **`Nexus\Workflow`** - Process automation, state machines
-- **`Nexus\Notifier`** - Multi-channel notifications (email, SMS, push, in-app)
-- **`Nexus\Scheduler`** - Task scheduling and job management
-- **`Nexus\DataProcessor`** - OCR, ETL interfaces (interface-only package)
-- **`Nexus\Intelligence`** - AI-assisted automation and predictions
-- **`Nexus\Geo`** - Geocoding, geofencing, routing
-- **`Nexus\Routing`** - Route optimization and caching
-
-### Reporting & Data (5 packages)
-- **`Nexus\Reporting`** - Report definition and execution engine
-- **`Nexus\Export`** - Multi-format export (PDF, Excel, CSV, JSON)
-- **`Nexus\Import`** - Data import with validation and transformation
-- **`Nexus\Analytics`** - Business intelligence, predictive models
-- **`Nexus\Document`** - Document management with versioning
-
-### Compliance & Governance (4 packages)
-- **`Nexus\Compliance`** - Process enforcement, operational compliance
-- **`Nexus\Statutory`** - Reporting compliance, statutory filing
-- **`Nexus\Backoffice`** - Company structure, offices, departments
-- **`Nexus\OrgStructure`** - Organizational hierarchy management
-
-### Support & Utilities (3 packages)
-- **`Nexus\Storage`** - File storage abstraction layer
-- **`Nexus\ProjectManagement`** - Projects, tasks, timesheets, milestones
-- **`Nexus\FeatureFlags`** - Feature flag management
-
-## 🛠️ Getting Started
-
-### Prerequisites
-- PHP 8.3+
-- Composer
-
-### Installation
-
-1. **Clone the repository:**
-   ```bash
-   git clone <repository-url> nexus
-   cd nexus
-   ```
-
-2. **Install Dependencies:**
-   ```bash
-   composer install
-   ```
-
-3. **Explore Packages:**
-   ```bash
-   # Browse available packages
-   ls packages/
-   
-   # Read package documentation
-   cat packages/Tenant/README.md
-   cat packages/Finance/README.md
-   ```
-
-## 📚 Usage
-
-### Installing a Package
-
-Each package can be installed independently in your PHP application:
+## Installation
 
 ```bash
-# In your Laravel, Symfony, or other PHP application
-composer require nexus/tenant
-composer require nexus/finance
-composer require nexus/receivable
+composer require nexus/identity:"*@dev"
 ```
 
-### Implementing Package Contracts
+## Architecture
 
-Packages define interfaces, your application provides implementations:
+### CQRS Pattern (v1.1.0+)
+
+The package follows CQRS (Command Query Responsibility Segregation) pattern. Each repository domain has separate interfaces:
+
+| Domain | Query Interface (Read) | Persist Interface (Write) |
+|--------|------------------------|---------------------------|
+| User | `UserQueryInterface` | `UserPersistInterface` |
+| Role | `RoleQueryInterface` | `RolePersistInterface` |
+| Permission | `PermissionQueryInterface` | `PermissionPersistInterface` |
+| MFA Enrollment | `MfaEnrollmentQueryInterface` | `MfaEnrollmentPersistInterface` |
+| Trusted Device | `TrustedDeviceQueryInterface` | `TrustedDevicePersistInterface` |
+| WebAuthn Credential | `WebAuthnCredentialQueryInterface` | `WebAuthnCredentialPersistInterface` |
+| Backup Code | `BackupCodeQueryInterface` | `BackupCodePersistInterface` |
+
+**Best Practice:** Inject the specific Query or Persist interface based on your needs:
 
 ```php
-// Package defines the interface
-namespace Nexus\Tenant\Contracts;
+// For read-only operations
+public function __construct(
+    private readonly UserQueryInterface $userQuery
+) {}
 
-interface TenantRepositoryInterface
-{
-    public function findById(string $id): ?TenantInterface;
-    public function save(TenantInterface $tenant): void;
+// For write operations
+public function __construct(
+    private readonly UserPersistInterface $userPersist
+) {}
+```
+
+### Package Structure
+
+```
+packages/domain/identity-security/
+├── src/
+│   ├── Contracts/              # Interfaces (CQRS Split)
+│   │   ├── UserInterface.php
+│   │   ├── UserQueryInterface.php      # Read operations
+│   │   ├── UserPersistInterface.php    # Write operations
+│   │   ├── UserRepositoryInterface.php # Combined (deprecated)
+│   │   ├── RoleQueryInterface.php
+│   │   ├── RolePersistInterface.php
+│   │   ├── PermissionQueryInterface.php
+│   │   ├── PermissionPersistInterface.php
+│   │   └── ... (40+ interfaces)
+│   ├── Services/               # Business Logic
+│   │   ├── UserManager.php
+│   │   ├── AuthenticationService.php
+│   │   ├── MfaEnrollmentService.php
+│   │   ├── MfaVerificationService.php
+│   │   └── ... (10 services)
+│   ├── ValueObjects/           # Immutable Data Structures
+│   │   ├── UserStatus.php
+│   │   ├── Credentials.php
+│   │   ├── WebAuthnCredential.php
+│   │   └── ... (20 value objects)
+│   └── Exceptions/             # Domain Exceptions
+│       ├── UserNotFoundException.php
+│       ├── MfaRequiredException.php
+│       └── ... (19 exceptions)
+├── docs/
+│   ├── getting-started.md
+│   ├── api-reference.md
+│   ├── integration-guide.md
+│   └── examples/
+├── tests/
+├── composer.json
+├── LICENSE
+└── README.md
+```
+
+### Core Principles
+
+1. **Logic in Packages, Implementation in Applications**
+   - Package defines **what** (interfaces, services, value objects)
+   - Application defines **how** (Eloquent models, repositories, migrations)
+
+2. **Framework Agnostic**
+   - Zero Laravel dependencies in `src/`
+   - No `Illuminate\*` classes
+   - No Eloquent models
+   - No database queries
+
+3. **Dependency Injection**
+   - Constructor injection for all dependencies
+   - Interface-based dependencies only
+
+4. **CQRS Separation**
+   - Query interfaces for read operations
+   - Persist interfaces for write operations
+   - Clear command/query responsibility
+
+## Usage Examples
+
+### User Management
+
+```php
+use Nexus\Identity\Services\UserManager;
+use Nexus\Identity\ValueObjects\Credentials;
+
+// Create a new user
+$user = $userManager->createUser([
+    'email' => 'john@example.com',
+    'password' => 'SecureP@ssw0rd!',
+    'name' => 'John Doe',
+    'tenant_id' => 'tenant_ulid',
+]);
+
+// Change password
+$userManager->changePassword($user->getId(), 'NewSecureP@ssw0rd!');
+
+// Activate user
+$userManager->activateUser($user->getId());
+
+// Lock user
+$userManager->lockUser($user->getId(), 'Suspicious activity detected');
+```
+
+### Authentication
+
+```php
+use Nexus\Identity\Services\AuthenticationService;
+use Nexus\Identity\ValueObjects\Credentials;
+
+$credentials = new Credentials('john@example.com', 'SecureP@ssw0rd!');
+
+// Login
+$result = $authService->login($credentials, [
+    'ip' => '192.168.1.1',
+    'user_agent' => 'Mozilla/5.0...',
+]);
+
+$user = $result['user'];
+$session = $result['session'];
+
+// Validate session
+$authenticatedUser = $authService->validateSession($session->token);
+
+// Logout
+$authService->logout($session->token);
+```
+
+### Authorization
+
+```php
+use Nexus\Identity\Services\PermissionChecker;
+
+// Check permission
+if ($permissionChecker->hasPermission($user, 'users.create')) {
+    // User can create users
 }
 
-// Your Laravel application implements it
-namespace App\Repositories;
-
-use Nexus\Tenant\Contracts\TenantRepositoryInterface;
-use Nexus\Tenant\Contracts\TenantInterface;
-use App\Models\Tenant;
-
-final class EloquentTenantRepository implements TenantRepositoryInterface
-{
-    public function findById(string $id): ?TenantInterface
-    {
-        return Tenant::find($id);
-    }
-    
-    public function save(TenantInterface $tenant): void
-    {
-        Tenant::updateOrCreate(['id' => $tenant->getId()], [
-            'name' => $tenant->getName(),
-            'status' => $tenant->getStatus()->value,
-        ]);
-    }
+// Check multiple permissions
+if ($permissionChecker->hasAllPermissions($user, ['users.create', 'users.update'])) {
+    // User has all permissions
 }
 
-// Bind in service provider
-$this->app->bind(
-    TenantRepositoryInterface::class,
-    EloquentTenantRepository::class
+// Check role
+if ($permissionChecker->hasRole($user, 'admin')) {
+    // User is an admin
+}
+
+// Wildcard permission matching
+// If user has "users.*", they have "users.create", "users.update", etc.
+```
+
+### Role Management
+
+```php
+use Nexus\Identity\Services\RoleManager;
+
+// Create a role
+$role = $roleManager->createRole([
+    'name' => 'manager',
+    'description' => 'Department Manager',
+    'tenant_id' => 'tenant_ulid',
+]);
+
+// Assign permission to role
+$roleManager->assignPermission($role->getId(), $permission->getId());
+
+// Assign role to user
+$userManager->assignRole($user->getId(), $role->getId());
+```
+
+### Permission Management
+
+```php
+use Nexus\Identity\Services\PermissionManager;
+
+// Create a permission
+$permission = $permissionManager->createPermission([
+    'name' => 'users.create',
+    'resource' => 'users',
+    'action' => 'create',
+    'description' => 'Create new users',
+]);
+
+// Create wildcard permission
+$wildcardPermission = $permissionManager->createPermission([
+    'name' => 'users.*',
+    'resource' => 'users',
+    'action' => '*',
+    'description' => 'All user operations',
+]);
+```
+
+### API Token Management
+
+```php
+use Nexus\Identity\Contracts\TokenManagerInterface;
+
+// Generate API token
+$token = $tokenManager->generateToken(
+    userId: $user->getId(),
+    name: 'Production API',
+    scopes: ['users.read', 'invoices.read'],
+    expiresAt: new \DateTimeImmutable('+1 year')
 );
+
+// Validate token
+$tokenUser = $tokenManager->validateToken($token->token);
+
+// Revoke token
+$tokenManager->revokeToken($token->id);
 ```
 
-### Using Package Services
+## Value Objects
+
+Value objects are immutable and enforce business rules:
+
+### UserStatus
 
 ```php
-use Nexus\Tenant\Contracts\TenantContextInterface;
-use Nexus\Finance\Contracts\GeneralLedgerManagerInterface;
+use Nexus\Identity\ValueObjects\UserStatus;
 
-class InvoiceController
-{
-    public function __construct(
-        private readonly TenantContextInterface $tenantContext,
-        private readonly GeneralLedgerManagerInterface $glManager
-    ) {}
-    
-    public function store(Request $request)
-    {
-        $tenantId = $this->tenantContext->getCurrentTenantId();
-        
-        // Use package business logic
-        $this->glManager->postJournalEntry($journalEntry);
-    }
+$status = UserStatus::ACTIVE;
+$status->canAuthenticate(); // true
+
+$locked = UserStatus::LOCKED;
+$locked->requiresAdminIntervention(); // true
+```
+
+### Credentials
+
+```php
+use Nexus\Identity\ValueObjects\Credentials;
+
+$credentials = new Credentials('user@example.com', 'password');
+// Validates email format on construction
+```
+
+### Permission
+
+```php
+use Nexus\Identity\ValueObjects\Permission;
+
+$permission = Permission::fromName('users.create');
+$permission->resource; // 'users'
+$permission->action; // 'create'
+$permission->isWildcard(); // false
+
+$wildcard = Permission::fromName('users.*');
+$wildcard->matches('users.create'); // true
+$wildcard->matches('users.update'); // true
+$wildcard->matches('roles.create'); // false
+```
+
+## Exception Handling
+
+All domain exceptions extend PHP's base `Exception`:
+
+```php
+use Nexus\Identity\Exceptions\UserNotFoundException;
+use Nexus\Identity\Exceptions\InvalidCredentialsException;
+use Nexus\Identity\Exceptions\InsufficientPermissionsException;
+
+try {
+    $user = $userManager->findUser($userId);
+} catch (UserNotFoundException $e) {
+    // Handle user not found
+}
+
+try {
+    $authService->login($credentials);
+} catch (InvalidCredentialsException $e) {
+    // Handle invalid credentials
+} catch (AccountLockedException $e) {
+    // Handle locked account
 }
 ```
 
-## 🏛️ Architectural Principles
+## Integration with Application Layer
 
-### 1. Framework Agnosticism
-- No Laravel, Symfony, or framework-specific code in packages
-- Use PSR interfaces (`psr/log`, `psr/http-client`, `psr/cache`)
-- All framework integration happens in consuming applications
+The application layer (`apps/Atomy`) must provide implementations for all contracts:
 
-### 2. Contract-Driven Design
-- Packages define needs via interfaces
-- Consuming applications provide implementations
-- Dependency injection for all external dependencies
+1. **Eloquent Models** implementing entity interfaces
+2. **Repositories** implementing repository interfaces
+3. **Service Implementations** (password hashing, validation, etc.)
+4. **Database Migrations**
+5. **Service Provider Bindings**
 
-### 3. Stateless Design
-- No session state in package classes
-- Long-term state externalized via storage interfaces
-- Horizontally scalable by design
+Example binding in `AppServiceProvider`:
 
-### 4. Modern PHP Standards
-- PHP 8.3+ with strict types
-- Constructor property promotion
-- Readonly properties for dependencies
-- Native enums for fixed value sets
-- Match expressions over switch statements
+```php
+// Repository bindings
+$this->app->singleton(UserRepositoryInterface::class, DbUserRepository::class);
+$this->app->singleton(RoleRepositoryInterface::class, DbRoleRepository::class);
+$this->app->singleton(PermissionRepositoryInterface::class, DbPermissionRepository::class);
+
+// Service implementations
+$this->app->singleton(PasswordHasherInterface::class, LaravelPasswordHasher::class);
+$this->app->singleton(PasswordValidatorInterface::class, LaravelPasswordValidator::class);
+$this->app->singleton(UserAuthenticatorInterface::class, LaravelUserAuthenticator::class);
+$this->app->singleton(SessionManagerInterface::class, LaravelSessionManager::class);
+$this->app->singleton(TokenManagerInterface::class, LaravelTokenManager::class);
+
+// Permission checker (uses base implementation)
+$this->app->singleton(PermissionCheckerInterface::class, PermissionChecker::class);
+```
+
+## Security Considerations
+
+1. **Password Hashing**: Use Argon2id or bcrypt (minimum cost 12)
+2. **Session Tokens**: Cryptographically secure random tokens (256 bits minimum)
+3. **API Tokens**: One-way hashed in database, only shown once on generation
+4. **Failed Login Tracking**: Lock account after configurable threshold (default 5)
+5. **Password History**: Prevent reuse of last N passwords (default 5)
+6. **Session Fingerprinting**: Bind sessions to IP/User-Agent
+7. **MFA Enforcement**: Can be required per role
+8. **Audit Logging**: All authentication/authorization events logged
+
+## Requirements Addressed
+
+This package addresses all requirements listed in REQUIREMENTS.csv for `Nexus\Identity`:
+
+- ✅ ARC-IDE-1300 to ARC-IDE-1310: Architectural requirements
+- ✅ BUS-IDE-1311 to BUS-IDE-1360: Business requirements
+- ✅ FUN-IDE-1361 to FUN-IDE-1410: Functional requirements
+- ✅ PERF-IDE-1411 to PERF-IDE-1416: Performance requirements
+- ✅ REL-IDE-1417 to REL-IDE-1423: Reliability requirements
+- ✅ SCL-IDE-1424 to SCL-IDE-1428: Scalability requirements
+- ✅ MAINT-IDE-1429 to MAINT-IDE-1435: Maintainability requirements
+- ✅ COMP-IDE-1436 to COMP-IDE-1444: Compliance requirements (GDPR, PCI-DSS, NIST)
+- ✅ USE-IDE-1445 to USE-IDE-1500: User stories
+
+## Testing
+
+Package tests should use mocks for all repository implementations:
+
+```php
+use Nexus\Identity\Services\UserManager;
+use Nexus\Identity\Contracts\UserRepositoryInterface;
+use PHPUnit\Framework\TestCase;
+
+class UserManagerTest extends TestCase
+{
+    public function test_create_user()
+    {
+        $mockRepo = $this->createMock(UserRepositoryInterface::class);
+        $mockRepo->expects($this->once())
+            ->method('emailExists')
+            ->willReturn(false);
+        
+        $userManager = new UserManager($mockRepo, $hasher, $validator);
+        // ... test logic
+    }
+}
+```
 
 ## 📖 Documentation
 
-- **[ARCHITECTURE.md](ARCHITECTURE.md)** - Architectural guidelines and rules
-- **[docs/NEXUS_PACKAGES_REFERENCE.md](docs/NEXUS_PACKAGES_REFERENCE.md)** - Complete package capabilities reference
-- **[.github/copilot-instructions.md](.github/copilot-instructions.md)** - Development guidelines
-- **Package READMEs** - Individual package documentation (e.g., `packages/Finance/README.md`)
+### Package Documentation
+- **[Getting Started Guide](docs/getting-started.md)** - Quick start guide with prerequisites, core concepts, and first integration
+- **[API Reference](docs/api-reference.md)** - Complete documentation of all 28 interfaces, 10 services, 20 value objects, and 19 exceptions
+- **[Integration Guide](docs/integration-guide.md)** - Laravel and Symfony integration examples with complete setup instructions
+- **[Basic Usage Example](docs/examples/basic-usage.php)** - Simple usage patterns for authentication, authorization, and MFA
+- **[Advanced Usage Example](docs/examples/advanced-usage.php)** - Advanced scenarios including WebAuthn, passwordless auth, and complex workflows
 
-## 🤝 Contributing
+### Additional Resources
+- `IMPLEMENTATION_SUMMARY.md` - Implementation progress, metrics, and key design decisions
+- `REQUIREMENTS.md` - All 401 requirements with status tracking
+- `TEST_SUITE_SUMMARY.md` - Test coverage metrics and test inventory (331+ tests, 95%+ coverage)
+- `VALUATION_MATRIX.md` - Package valuation metrics for funding assessment ($300K+ estimated value)
+- See root `../../ARCHITECTURE.md` for overall system architecture
+- See `../../docs/NEXUS_PACKAGES_REFERENCE.md` for package ecosystem reference
 
-Please refer to [ARCHITECTURE.md](ARCHITECTURE.md) for detailed architectural guidelines.
+## License
 
-### Key Rules:
-1. **Packages must be framework-agnostic** - No Laravel, Symfony, or framework-specific code
-2. **Packages define persistence needs via Contracts** - No migrations or models in packages
-3. **All dependencies must be interfaces** - Use dependency injection
-4. **Modern PHP 8.3+ standards** - Use latest language features
-5. **Consult NEXUS_PACKAGES_REFERENCE.md** - Avoid reimplementing existing functionality
-
-### Creating a New Package
-
-1. Create `packages/NewPackage/` directory
-2. Run `composer init` (require `"php": "^8.3"`)
-3. Define PSR-4 autoloader: `"Nexus\\NewPackage\\": "src/"`
-4. Create `src/Contracts/`, `src/Services/`, `src/Exceptions/`
-5. Write comprehensive `README.md` with usage examples
-6. Add MIT `LICENSE` file
-7. Update root `composer.json` repositories array
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🔗 Links
-
-- **Package Reference Guide**: [docs/NEXUS_PACKAGES_REFERENCE.md](docs/NEXUS_PACKAGES_REFERENCE.md)
-- **Architecture Documentation**: [ARCHITECTURE.md](ARCHITECTURE.md)
-- **Implementation Summaries**: `docs/*_IMPLEMENTATION_SUMMARY.md`
-
----
-
-**Nexus** - Building the future of modular ERP systems with framework-agnostic PHP packages.
+MIT License. See [LICENSE](LICENSE) file for details.
